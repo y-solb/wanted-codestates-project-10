@@ -9,7 +9,7 @@
       }
     ],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": "off"
   },
   "env": {
     "browser": true,
