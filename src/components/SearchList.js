@@ -17,13 +17,20 @@ const ListText = styled.p`
   color: ${({ theme }) => theme.colors.gray};
 `;
 
-function SearchList({ filteredList }) {
+function SearchList({ filteredList, handleKeyDown, handleInput, focus }) {
   return (
     <List>
       <ListText>추천 검색어</ListText>
       {filteredList &&
-        filteredList.map((filteredItem) => (
-          <SearchItem key={filteredItem.id} filteredItem={filteredItem} />
+        filteredList.map((filteredItem, index) => (
+          <SearchItem
+            key={filteredItem.id}
+            filteredItem={filteredItem}
+            handleKeyDown={handleKeyDown}
+            handleInput={handleInput}
+            isFocus={index === focus}
+            index={index}
+          />
         ))}
     </List>
   );
@@ -36,6 +43,9 @@ SearchList.propTypes = {
       name: PropTypes.string,
     })
   ).isRequired,
+  handleKeyDown: PropTypes.func.isRequired,
+  handleInput: PropTypes.func.isRequired,
+  focus: PropTypes.number.isRequired,
 };
 
 export default SearchList;

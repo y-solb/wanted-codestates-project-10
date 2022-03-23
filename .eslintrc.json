@@ -10,7 +10,8 @@
     ],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "comma-dangle": "off",
-    "operator-linebreak": 0
+    "operator-linebreak": "off",
+    "object-curly-newline": "off"
   },
   "env": {
     "browser": true,
