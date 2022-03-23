@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 import SearchList from './SearchList';
-import data from '../data.json';
+import search from '../service/searchKeyword';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -55,10 +55,7 @@ function SearchBar() {
     const { value } = e.target;
     setKeyword(value);
     if (value) {
-      const newFilter = data
-        .filter((el) => el.name.includes(value))
-        .slice(0, 7);
-      setFilteredList(newFilter);
+      search(value).then((newFilters) => setFilteredList(newFilters));
     } else {
       setFilteredList([]);
     }
