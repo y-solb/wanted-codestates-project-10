@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 import SearchList from './SearchList';
-import { getSearch } from '../modules/filterList/action';
+import { getSearch, resetSearch } from '../modules/filterList/action';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -49,26 +49,21 @@ const SearchButton = styled.button`
 
 function SearchBar() {
   const filteredList = useSelector((state) => state.searchReducer.filteredList);
+  const isOpen = useSelector((state) => state.searchReducer.isOpen);
   const dispatch = useDispatch();
-
   const [keyword, setKeyword] = useState('');
   const [focus, setFocus] = useState(-1);
 
   const handleFilter = (e) => {
     const { value } = e.target;
     setKeyword(value);
-    if (value) {
-      dispatch(getSearch(value));
-    }
-    // else {
-    //   dispatch(filteredListReq([]));
-    // }
+    dispatch(getSearch(value));
     setFocus(-1);
   };
 
   const handleInput = (id) => {
     setKeyword(filteredList[id].name);
-    // dispatch(filteredListReq([]));
+    dispatch(resetSearch());
     setFocus(-1);
   };
 
@@ -101,7 +96,7 @@ function SearchBar() {
         </SearchBox>
         <SearchButton>검색</SearchButton>
       </SearchContainer>
-      {keyword.length > 0 && (
+      {isOpen && (
         <SearchList
           filteredList={filteredList}
           handleKeyDown={handleKeyDown}
