@@ -19,10 +19,10 @@ const ListText = styled.p`
 `;
 
 function SearchList({ filteredList, handleKeyDown, handleInput, focus }) {
-  const loading = useSelector((state) => state.searchReducer.loading);
+  const isLoading = useSelector((state) => state.searchReducer.isLoading);
 
-  const handleMessage = (loadingState, filteredListState) => {
-    if (loadingState) {
+  const handleMessage = (isLoadingState, filteredListState) => {
+    if (isLoadingState) {
       return '검색 중...';
     }
     if (filteredListState.length > 0) {
@@ -33,7 +33,7 @@ function SearchList({ filteredList, handleKeyDown, handleInput, focus }) {
 
   return (
     <List>
-      <ListText>{handleMessage(loading, filteredList)}</ListText>
+      <ListText>{handleMessage(isLoading, filteredList)}</ListText>
       {filteredList &&
         filteredList.map((filteredItem, index) => (
           <SearchItem

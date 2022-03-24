@@ -6,7 +6,7 @@ import {
 } from './action';
 
 const intialState = {
-  loading: false,
+  isLoading: false,
   isOpen: false,
   filteredList: [],
   error: '',
@@ -15,18 +15,18 @@ const intialState = {
 const searchReducer = (state = intialState, action) => {
   switch (action.type) {
     case GET_SEARCH:
-      return { ...state, loading: true, isOpen: true };
+      return { ...state, isLoading: true, isOpen: true };
     case GET_SEARCH_SUCCESS:
       return {
         ...state,
-        loading: false,
+        isLoading: false,
         isOpen: true,
         filteredList: action.newList,
       };
     case GET_SEARCH_FAIL:
-      return { ...state, loading: false, isOpen: false, error: action.error };
+      return { ...state, isLoading: false, isOpen: false, error: action.error };
     case RESET_SEARCH:
-      return { ...state, loading: false, isOpen: false, filteredList: [] };
+      return { ...state, isLoading: false, isOpen: false, filteredList: [] };
     default:
       return state;
   }
