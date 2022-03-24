@@ -3,7 +3,11 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 import SearchList from './SearchList';
-import { getSearch, resetSearch } from '../modules/filterList/action';
+import {
+  closeSearchList,
+  getSearch,
+  resetSearch,
+} from '../modules/filterList/action';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -55,9 +59,9 @@ const SearchButton = styled.button`
 `;
 
 function SearchBar() {
-  const filteredList = useSelector((state) => state.searchReducer.filteredList);
-  const isOpen = useSelector((state) => state.searchReducer.isOpen);
+  const { filteredList, isOpen } = useSelector((state) => state.searchReducer);
   const dispatch = useDispatch();
+
   const [keyword, setKeyword] = useState('');
   const [focus, setFocus] = useState(-1);
 
@@ -71,6 +75,7 @@ function SearchBar() {
   const handleInput = (id) => {
     setKeyword(filteredList[id].name);
     dispatch(resetSearch());
+    dispatch(closeSearchList());
     setFocus(-1);
   };
 
