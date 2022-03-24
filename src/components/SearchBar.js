@@ -10,6 +10,10 @@ const SearchContainer = styled.div`
   flex-direction: row;
   width: 100%;
   border-radius: 42px;
+  @media screen and (max-width: 1040px) {
+    height: 46px;
+    box-shadow: 0px 2px 2px rgb(30 32 37 / 10%);
+  }
 `;
 
 const SearchBox = styled.div`
@@ -21,6 +25,9 @@ const SearchBox = styled.div`
   padding: 20px 24px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 42px 0px 0px 42px;
+  @media screen and (max-width: 1040px) {
+    padding: 12px 20px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -42,8 +49,8 @@ const SearchButton = styled.button`
   font-size: 1.125rem;
   font-weight: 700;
   line-height: 1.6;
-  :focus {
-    outline: 2px solid ${({ theme }) => theme.colors.black};
+  @media screen and (max-width: 1040px) {
+    padding: 0px 20px;
   }
 `;
 

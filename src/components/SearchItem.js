@@ -13,6 +13,9 @@ const Item = styled.li`
     outline: none;
     background-color: ${({ theme }) => theme.colors.lightGray};
   }
+  @media screen and (max-width: 1040px) {
+    padding: 6px 24px;
+  }
 `;
 
 const ItemText = styled.p`
