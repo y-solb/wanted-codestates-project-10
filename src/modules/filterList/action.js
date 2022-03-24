@@ -2,7 +2,7 @@ export const GET_SEARCH = 'GET_SEARCH';
 export const GET_SEARCH_SUCCESS = 'GET_SEARCH_SUCCESS';
 export const GET_SEARCH_FAIL = 'GET_SEARCH_FAIL';
 export const RESET_SEARCH = 'RESET_SEARCH';
-export const SET_KEYWORD = 'SET_KEYWORD';
+export const CLOSE_SEARCHLIST = 'CLOSE_SEARCHLIST';
 
 export const getSearch = (keyword) => ({
   type: GET_SEARCH,
@@ -21,4 +21,8 @@ export const getSearchFail = (error) => ({
 
 export const resetSearch = () => ({
   type: RESET_SEARCH,
+});
+
+export const closeSearchList = () => ({
+  type: CLOSE_SEARCHLIST,
 });

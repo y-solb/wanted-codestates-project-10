@@ -3,6 +3,7 @@ import {
   GET_SEARCH_SUCCESS,
   GET_SEARCH_FAIL,
   RESET_SEARCH,
+  CLOSE_SEARCHLIST,
 } from './action';
 
 const intialState = {
@@ -27,6 +28,8 @@ const searchReducer = (state = intialState, action) => {
       return { ...state, isLoading: false, isOpen: false, error: action.error };
     case RESET_SEARCH:
       return { ...state, isLoading: false, isOpen: false, filteredList: [] };
+    case CLOSE_SEARCHLIST:
+      return { ...state, isOpen: false };
     default:
       return state;
   }

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import SearchBar from './components/SearchBar';
+import { closeSearchList } from './modules/filterList/action';
 
 const Background = styled.div`
   display: flex;
@@ -29,6 +31,13 @@ const HeaderText = styled.p`
 `;
 
 function App() {
+  const dispatch = useDispatch();
+  const handleBackground = (e) => {
+    if (e.target === e.currentTarget) {
+      dispatch(closeSearchList());
+    }
+  };
+
   useEffect(() => {
     Object.keys(localStorage).forEach((key) => {
       const value = JSON.parse(localStorage.getItem(key));
@@ -39,7 +48,7 @@ function App() {
   }, []);
 
   return (
-    <Background>
+    <Background onClick={handleBackground}>
       <ContentContainer>
         <HeaderBox>
           <HeaderText>
