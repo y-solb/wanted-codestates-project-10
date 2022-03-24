@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
@@ -8,6 +8,8 @@ import {
   getSearch,
   resetSearch,
 } from '../modules/filterList/action';
+
+const SearchBarContainer = styled.div``;
 
 const SearchContainer = styled.div`
   display: flex;
@@ -64,6 +66,7 @@ function SearchBar() {
 
   const [keyword, setKeyword] = useState('');
   const [focus, setFocus] = useState(-1);
+  const searchBarRef = useRef();
 
   const handleFilter = (e) => {
     const { value } = e.target;
@@ -93,12 +96,25 @@ function SearchBar() {
     }
   };
 
-  const handleClick = () => {
+  const handleButtonClick = () => {
     window.location.href = `${process.env.REACT_APP_MOVE_URL}=${keyword}`;
   };
 
+  const handleOutsideClick = (e) => {
+    if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+      dispatch(closeSearchList());
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <>
+    <SearchBarContainer ref={searchBarRef}>
       <SearchContainer>
         <SearchBox>
           <SearchIcon />
@@ -110,7 +126,7 @@ function SearchBar() {
             autoComplete="off"
           />
         </SearchBox>
-        <SearchButton onClick={handleClick}>검색</SearchButton>
+        <SearchButton onClick={handleButtonClick}>검색</SearchButton>
       </SearchContainer>
       {isOpen && (
         <SearchList
@@ -120,7 +136,7 @@ function SearchBar() {
           focus={focus}
         />
       )}
-    </>
+    </SearchBarContainer>
   );
 }
 
