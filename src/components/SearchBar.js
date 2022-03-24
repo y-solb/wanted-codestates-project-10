@@ -49,11 +49,11 @@ const SearchButton = styled.button`
 
 function SearchBar() {
   const filteredList = useSelector((state) => state.searchReducer.filteredList);
-  const loading = useSelector((state) => state.searchReducer.loading);
   const dispatch = useDispatch();
+
   const [keyword, setKeyword] = useState('');
   const [focus, setFocus] = useState(-1);
-  console.log(loading);
+
   const handleFilter = (e) => {
     const { value } = e.target;
     setKeyword(value);
@@ -101,7 +101,7 @@ function SearchBar() {
         </SearchBox>
         <SearchButton>검색</SearchButton>
       </SearchContainer>
-      {filteredList.length > 0 && (
+      {keyword.length > 0 && (
         <SearchList
           filteredList={filteredList}
           handleKeyDown={handleKeyDown}

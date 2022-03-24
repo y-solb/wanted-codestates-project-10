@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import SearchItem from './SearchItem';
 
 const List = styled.ul`
   margin-top: 8px;
-  padding: 24px 0px 16px 0px;
+  padding: 16px 0px 16px 0px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 20px;
 `;
@@ -18,9 +19,21 @@ const ListText = styled.p`
 `;
 
 function SearchList({ filteredList, handleKeyDown, handleInput, focus }) {
+  const loading = useSelector((state) => state.searchReducer.loading);
+
+  const handleMessage = (loadingState, filteredListState) => {
+    if (loadingState) {
+      return '검색 중...';
+    }
+    if (filteredListState.length > 0) {
+      return '추천 검색어';
+    }
+    return '검색어 없음';
+  };
+
   return (
     <List>
-      <ListText>추천 검색어</ListText>
+      <ListText>{handleMessage(loading, filteredList)}</ListText>
       {filteredList &&
         filteredList.map((filteredItem, index) => (
           <SearchItem
