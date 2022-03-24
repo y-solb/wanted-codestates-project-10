@@ -93,6 +93,10 @@ function SearchBar() {
     }
   };
 
+  const handleClick = () => {
+    window.location.href = `${process.env.REACT_APP_MOVE_URL}=${keyword}`;
+  };
+
   return (
     <>
       <SearchContainer>
@@ -106,7 +110,7 @@ function SearchBar() {
             autoComplete="off"
           />
         </SearchBox>
-        <SearchButton>검색</SearchButton>
+        <SearchButton onClick={handleClick}>검색</SearchButton>
       </SearchContainer>
       {isOpen && (
         <SearchList
