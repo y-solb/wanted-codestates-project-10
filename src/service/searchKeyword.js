@@ -7,5 +7,5 @@ export default async function search(keyword) {
     },
   });
 
-  return response.data.slice(0, 7);
+  return response;
 }
