@@ -6,9 +6,12 @@ import SearchItem from './SearchItem';
 
 const List = styled.ul`
   margin-top: 8px;
-  padding: 16px 0px 16px 0px;
+  padding: 16px 0px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 20px;
+  @media screen and (max-width: 1040px) {
+    padding: 12px 0px;
+  }
 `;
 
 const ListText = styled.p`

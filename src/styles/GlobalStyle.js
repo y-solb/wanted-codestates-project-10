@@ -10,6 +10,12 @@ const GlobalStyle = createGlobalStyle`
     font-size:16px ;
   }
 
+  @media screen and (max-width: 1040px) {
+    html {
+    font-size: 12px;
+    }
+  }
+
   body {
     font-family: "Helvetica", "Arial", sans-serif;
   }
