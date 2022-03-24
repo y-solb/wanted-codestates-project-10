@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReactComponent as SearchIcon } from '../assets/search.svg';
 import SearchList from './SearchList';
-import search from '../service/searchKeyword';
+import { getSearch } from '../modules/filterList/action';
 
 const SearchContainer = styled.div`
   display: flex;
@@ -47,24 +48,27 @@ const SearchButton = styled.button`
 `;
 
 function SearchBar() {
+  const filteredList = useSelector((state) => state.searchReducer.filteredList);
+  const loading = useSelector((state) => state.searchReducer.loading);
+  const dispatch = useDispatch();
   const [keyword, setKeyword] = useState('');
-  const [filteredList, setFilteredList] = useState([]);
   const [focus, setFocus] = useState(-1);
-
+  console.log(loading);
   const handleFilter = (e) => {
     const { value } = e.target;
     setKeyword(value);
     if (value) {
-      search(value).then((newFilters) => setFilteredList(newFilters));
-    } else {
-      setFilteredList([]);
+      dispatch(getSearch(value));
     }
+    // else {
+    //   dispatch(filteredListReq([]));
+    // }
     setFocus(-1);
   };
 
   const handleInput = (id) => {
     setKeyword(filteredList[id].name);
-    setFilteredList([]);
+    // dispatch(filteredListReq([]));
     setFocus(-1);
   };
 
