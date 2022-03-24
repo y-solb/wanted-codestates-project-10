@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import SearchBar from './components/SearchBar';
 
@@ -29,6 +29,15 @@ const HeaderText = styled.p`
 `;
 
 function App() {
+  useEffect(() => {
+    Object.keys(localStorage).forEach((key) => {
+      const value = JSON.parse(localStorage.getItem(key));
+      if (Date.now() > value.expireTime) {
+        localStorage.removeItem(key);
+      }
+    });
+  }, []);
+
   return (
     <Background>
       <ContentContainer>
