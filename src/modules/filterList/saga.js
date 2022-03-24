@@ -5,9 +5,11 @@ import {
   GET_SEARCH_SUCCESS,
   GET_SEARCH_FAIL,
   RESET_SEARCH,
+  CLOSE_SEARCHLIST,
 } from './action';
 
 function* searchRequest(action) {
+  yield put({ type: RESET_SEARCH });
   yield delay(500);
 
   if (action.keyword.length > 0) {
@@ -37,6 +39,7 @@ function* searchRequest(action) {
     }
   } else {
     yield put({ type: RESET_SEARCH });
+    yield put({ type: CLOSE_SEARCHLIST });
   }
 }
 
