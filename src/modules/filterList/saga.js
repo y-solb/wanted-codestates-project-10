@@ -11,14 +11,29 @@ function* searchRequest(action) {
   yield delay(500);
 
   if (action.keyword.length > 0) {
-    const response = yield call(search, action.keyword);
-    try {
+    const localStorageData = localStorage.getItem(action.keyword);
+
+    if (localStorageData) {
       yield put({
         type: GET_SEARCH_SUCCESS,
-        newList: response.data.slice(0, 7),
+        newList: JSON.parse(localStorageData).filteredList,
       });
-    } catch (error) {
-      yield put({ type: GET_SEARCH_FAIL, error: error.response.data });
+    } else {
+      const response = yield call(search, action.keyword);
+      const TIME = 10000;
+      const value = {
+        filteredList: response.data.slice(0, 7),
+        expireTime: Date.now() + TIME,
+      };
+      localStorage.setItem(action.keyword, JSON.stringify(value));
+      try {
+        yield put({
+          type: GET_SEARCH_SUCCESS,
+          newList: response.data.slice(0, 7),
+        });
+      } catch (error) {
+        yield put({ type: GET_SEARCH_FAIL, error: error.response.data });
+      }
     }
   } else {
     yield put({ type: RESET_SEARCH });
