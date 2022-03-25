@@ -67,6 +67,7 @@ function SearchBar() {
   const [keyword, setKeyword] = useState('');
   const [focus, setFocus] = useState(-1);
   const searchBarRef = useRef();
+  const inputRef = useRef();
 
   const handleFilter = (e) => {
     const { value } = e.target;
@@ -75,11 +76,15 @@ function SearchBar() {
     setFocus(-1);
   };
 
-  const handleInput = (id) => {
-    setKeyword(filteredList[id].name);
+  const handleInput = (index) => {
+    setKeyword(filteredList[index].name);
     dispatch(resetSearch());
     dispatch(closeSearchList());
     setFocus(-1);
+  };
+
+  const handleButtonClick = () => {
+    window.location.href = `${process.env.REACT_APP_MOVE_URL}=${keyword}`;
   };
 
   const handleKeyDown = (e, index) => {
@@ -95,11 +100,10 @@ function SearchBar() {
       dispatch(closeSearchList());
     } else if (e.key === 'Enter' && index > -1) {
       handleInput(index);
+      inputRef.current.focus();
+    } else if (e.key === 'Enter' && index === -1) {
+      handleButtonClick();
     }
-  };
-
-  const handleButtonClick = () => {
-    window.location.href = `${process.env.REACT_APP_MOVE_URL}=${keyword}`;
   };
 
   const handleOutsideClick = (e) => {
@@ -121,6 +125,7 @@ function SearchBar() {
         <SearchBox>
           <SearchIcon />
           <SearchInput
+            ref={inputRef}
             value={keyword}
             onChange={handleFilter}
             onKeyDown={(e) => handleKeyDown(e, focus)}
