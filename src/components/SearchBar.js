@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { ReactComponent as SearchIcon } from '../assets/search.svg';
+import { ReactComponent as SearchSVG } from '../assets/search.svg';
 import SearchList from './SearchList';
 import {
   closeSearchList,
@@ -9,7 +9,10 @@ import {
   resetSearch,
 } from '../modules/filterList/action';
 
-const SearchBarContainer = styled.div``;
+const SearchBarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const SearchContainer = styled.div`
   display: flex;
@@ -36,6 +39,12 @@ const SearchBox = styled.div`
   }
 `;
 
+const SearchIcon = styled(SearchSVG)`
+  @media screen and (max-width: 1040px) {
+    display: none;
+  }
+`;
+
 const SearchInput = styled.input`
   width: 100%;
   margin-left: 12px;
@@ -43,6 +52,9 @@ const SearchInput = styled.input`
   border: none;
   :focus {
     outline: none;
+  }
+  @media screen and (max-width: 1040px) {
+    margin-left: 0px;
   }
 `;
 
@@ -56,7 +68,18 @@ const SearchButton = styled.button`
   font-weight: 700;
   line-height: 1.6;
   @media screen and (max-width: 1040px) {
-    padding: 0px 20px;
+    display: none;
+  }
+`;
+
+const IconButton = styled.button`
+  display: none;
+  @media screen and (max-width: 1040px) {
+    display: flex;
+    padding: 14px 20px;
+    border: none;
+    background-color: ${({ theme }) => theme.colors.white};
+    border-radius: 0px 42px 42px 0px;
   }
 `;
 
@@ -134,6 +157,9 @@ function SearchBar() {
           />
         </SearchBox>
         <SearchButton onClick={handleButtonClick}>검색</SearchButton>
+        <IconButton onClick={handleButtonClick}>
+          <SearchSVG />
+        </IconButton>
       </SearchContainer>
       {isOpen && (
         <SearchList
