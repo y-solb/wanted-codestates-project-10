@@ -7,7 +7,7 @@
 
 ## 배포 링크
 
-[🚀 배포 링크](https://logpreesso-9.netlify.app/)
+[🚀 배포 링크](https://humanscape-ysb.netlify.app/)
 
 ## 기술 스택
 
