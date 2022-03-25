@@ -22,21 +22,24 @@ const ListText = styled.p`
 `;
 
 function SearchList({ filteredList, handleKeyDown, handleInput, focus }) {
-  const isLoading = useSelector((state) => state.searchReducer.isLoading);
+  const { isLoading, error } = useSelector((state) => state.searchReducer);
 
-  const handleMessage = (isLoadingState, filteredListState) => {
+  const handleMessage = (isLoadingState, filteredListState, errorMessage) => {
     if (isLoadingState) {
       return '검색 중...';
     }
     if (filteredListState.length > 0) {
       return '추천 검색어';
     }
+    if (errorMessage) {
+      return 'API 요청에 문제가 생겼습니다.';
+    }
     return '검색어 없음';
   };
 
   return (
     <List>
-      <ListText>{handleMessage(isLoading, filteredList)}</ListText>
+      <ListText>{handleMessage(isLoading, filteredList, error)}</ListText>
       {filteredList &&
         filteredList.map((filteredItem, index) => (
           <SearchItem

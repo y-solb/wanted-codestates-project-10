@@ -25,7 +25,7 @@ const searchReducer = (state = intialState, action) => {
         filteredList: action.newList,
       };
     case GET_SEARCH_FAIL:
-      return { ...state, isLoading: false, isOpen: false, error: action.error };
+      return { ...state, isLoading: false, isOpen: true, error: action.error };
     case RESET_SEARCH:
       return { ...state, filteredList: [] };
     case CLOSE_SEARCHLIST:
