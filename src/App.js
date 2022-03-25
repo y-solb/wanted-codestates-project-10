@@ -22,7 +22,7 @@ const HeaderBox = styled.div`
 `;
 
 const HeaderText = styled.p`
-  font-size: 2.125rem;
+  font-size: ${({ theme }) => theme.fontSizes.large};
   font-weight: 700;
   line-height: 1.6;
   text-align: center;
