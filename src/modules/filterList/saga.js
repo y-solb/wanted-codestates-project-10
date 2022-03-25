@@ -10,11 +10,21 @@ import {
 
 const TIME = 60 * 1000;
 
+function checkExpireTime() {
+  Object.keys(localStorage).forEach((key) => {
+    const value = JSON.parse(localStorage.getItem(key));
+    if (Date.now() > value.expireTime) {
+      localStorage.removeItem(key);
+    }
+  });
+}
+
 function* searchRequest(action) {
   yield put({ type: RESET_SEARCH });
   yield delay(500);
 
   if (action.keyword.length > 0) {
+    checkExpireTime();
     const localStorageData = localStorage.getItem(action.keyword);
 
     if (localStorageData) {
