@@ -9,14 +9,14 @@ const List = styled.ul`
   padding: 16px 0px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 20px;
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     padding: 12px 0px;
   }
 `;
 
 const ListText = styled.p`
   padding: 0px 24px;
-  font-size: 0.825rem;
+  font-size: ${({ theme }) => theme.fontSizes.small};
   line-height: 1.6;
   color: ${({ theme }) => theme.colors.gray};
 `;

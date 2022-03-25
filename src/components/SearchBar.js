@@ -19,7 +19,7 @@ const SearchContainer = styled.div`
   flex-direction: row;
   width: 100%;
   border-radius: 42px;
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     height: 46px;
     box-shadow: 0px 2px 2px rgb(30 32 37 / 10%);
   }
@@ -34,13 +34,13 @@ const SearchBox = styled.div`
   padding: 20px 24px;
   background-color: ${({ theme }) => theme.colors.white};
   border-radius: 42px 0px 0px 42px;
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     padding: 12px 20px;
   }
 `;
 
 const SearchIcon = styled(SearchSVG)`
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     display: none;
   }
 `;
@@ -48,12 +48,12 @@ const SearchIcon = styled(SearchSVG)`
 const SearchInput = styled.input`
   width: 100%;
   margin-left: 12px;
-  font-size: 1.125rem;
+  font-size: ${({ theme }) => theme.fontSizes.medium};
   border: none;
   :focus {
     outline: none;
   }
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     margin-left: 0px;
   }
 `;
@@ -64,17 +64,17 @@ const SearchButton = styled.button`
   background-color: ${({ theme }) => theme.colors.blue};
   border: none;
   border-radius: 0px 42px 42px 0px;
-  font-size: 1.125rem;
+  font-size: ${({ theme }) => theme.fontSizes.medium};
   font-weight: 700;
   line-height: 1.6;
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     display: none;
   }
 `;
 
 const IconButton = styled.button`
   display: none;
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     display: flex;
     padding: 14px 20px;
     border: none;

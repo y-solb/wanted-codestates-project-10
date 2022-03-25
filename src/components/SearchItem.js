@@ -13,13 +13,13 @@ const Item = styled.li`
     outline: none;
     background-color: ${({ theme }) => theme.colors.lightGray};
   }
-  @media screen and (max-width: 1040px) {
+  @media ${({ theme }) => theme.device.laptop} {
     padding: 6px 24px;
   }
 `;
 
 const ItemText = styled.p`
-  font-size: 1rem;
+  font-size: ${({ theme }) => theme.fontSizes.regular};
   line-height: 1.6;
   margin-left: 12px;
 `;
