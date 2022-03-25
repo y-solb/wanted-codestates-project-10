@@ -91,7 +91,9 @@ function SearchBar() {
       setFocus(index - 1);
     } else if (e.keyCode === 38 && index === 0) {
       setFocus(filteredList.length - 1);
-    } else if (e.key === 'Enter') {
+    } else if (e.keyCode === 27) {
+      dispatch(closeSearchList());
+    } else if (e.key === 'Enter' && index > -1) {
       handleInput(index);
     }
   };
