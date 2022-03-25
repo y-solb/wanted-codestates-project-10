@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# 휴먼스케이프
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 프로젝트 소개
 
-## Available Scripts
+- 검색어 추천이 있는 검색창 만들기
+- 기간: 22.03.21~22.03.25
 
-In the project directory, you can run:
+## 배포 링크
 
-### `yarn start`
+[🚀 배포 링크](https://humanscape-ysb.netlify.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 기술 스택
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- JavaScript
+- React
+- Redux
+- Redux-saga
+- Axios
+- Styled-compoents
 
-### `yarn test`
+## 실행 방법
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+git clone https://github.com/y-solb/wanted-codestates-project-10.git
 
-### `yarn build`
+cd wanted-codestates-project-10
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+yarn install
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+yarn start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// .env에 url 추가
+REACT_APP_SEARCH_API=검색어추천url~/search-conditions까지 입력
+REACT_APP_MOVE_UR=검색된페이지url~/studies?condition까지 입력
 
-### `yarn eject`
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 구현 방법
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### API 호출 최적화
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- 비동기 api 호출은 redux-saga를 이용했습니다.
+- 글자 입력 시마다 호출을 막기 위해 debounce를 구현했습니다. `delay`를 `500ms`로 주고 `takeLatest`를 이용해 가장 마지막 입력만 실행하도록 했습니다.
+- 글자를 입력했다가 모두 지우는 경우에는 검색어 조회를 하지 않고 추천 검색창을 닫도록 했습니다.
+- 입력된 글자가 있는 경우에는 즉 `action.keyword.length > 0`이라면 검색어 조회를 합니다.
+- api 호출에 성공할 경우 받아온 데이터를 7개만 잘라 업데이트해 줬습니다. 실패한 경우에는 error 메세지를 받도록 했습니다.
+- url은 .env 파일에 넣었습니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 호출별로 로컬 캐싱 구현
 
-## Learn More
+- 검색어 조회 시 localStorage에 일치하는 keyword가 있다면 api 호출을 하지 않고 localStorage에 저장된 데이터를 이용했습니다. 일치하는 keyword가 없다면 api 호출을 합니다. 그 후에는 keyword를 key에 받아온 데이터와 만료 시간을 value에 넣어 localStorage에 추가해 줬습니다.
+- 만료시간은 `Date.now()+TIME`으로 넣어줬습니다. TIME은 `(60 * 1000)ms` (1분)입니다. `Date.now()`와 비교하여 만료시간이 지났다면 삭제해 줬습니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```jsx
+function checkExpireTime() {
+  Object.keys(localStorage).forEach((key) => {
+    const value = JSON.parse(localStorage.getItem(key));
+    if (Date.now() > value.expireTime) {
+      localStorage.removeItem(key);
+    }
+  });
+}
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 키보드만으로도 추천 검색어들로 이동이 가능
 
-### Code Splitting
+- 위, 아래 방향 키로 추천 검색어 리스트 focus 이동이 가능합니다. 최상단에서 위쪽 방향 키를 누르면 하단으로 이동합니다. 반대로 최하단에서 아래쪽 방향 키를 누르면 최상단으로 이동합니다.
+- 추천 검색어 리스트에서 Enter 키를 누르면 해당 검색어가 input 창에 나타납니다.
+- esc 키가 눌리면 추천 검색어 리스트가 닫힙니다.
+- tab 키를 누르면 페이지 전체 focus 이동이 가능합니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 검색 상태
 
-### Analyzing the Bundle Size
+- 검색 중(isLoading이 true)인 경우 ‘검색 중..’
+- 추천 검색어가 없을 경우 ‘검색어 없음'
+- 추천 검색어가 있는 경우 ‘추천 검색어’
+- 에러 발생한 경우 'API 요청에 문제가 생겼습니다.'가 나타납니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 반응형
 
-### Making a Progressive Web App
+- 반응형으로 제작했습니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 검색된 페이지로 이동
 
-### Advanced Configuration
+- 검색창(input)에서 Enter 키가 눌리면 해당 keyword가 검색된 페이지로 이동합니다.
+- 검색 버튼이 클릭되면 해당 keyword가 검색된 페이지로 이동합니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 검색창 외 영역 클릭 시 검색창 리스트가 닫힘
 
-### Deployment
+- `useEffect`로 클릭을 감지합니다. `e.target`이 `searchBarRef.current`에 포함되어 있지 않았다면 외부 클릭으로 감지하고 검색창이 닫힙니다.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 추천 검색어 클릭 시 검색창에 반영
 
-### `yarn build` fails to minify
+- 검색어 리스트에서 hover 시 배경색이 회색으로 나타나고 클릭 시 검색창에 추천 검색어가 반영됩니다. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 어려웠던 점
+
+### redux-saga
+
+- redux-saga를 처음 사용해 봐서 초반에 어려움이 있었으나 조금씩 이해하니 saga의 편리함을 느낄 수 있었습니다. effects를 이용하여 debounce를 간단하게 구현할 수 있었습니다.
+
+### 추천 검색어들을 tab키로 이동이 가능하고 위, 아래 방향 키로도 이동이 가능하게 구현
+
+- 초반에는 위, 아래 방향 키로 이동 시 `index` 값을 더하거나 빼주고 현재 `index` 값과 같다면 `props`를 넘겨줘 배경 색상을 변경해 줬습니다. 위, 아래 방향 키만 작동했을 때는 `index`에 맞게 잘 작동했습니다. 하지만 tab키로 이동하다가 위, 아래 방향 키로 이동 시 현재 focus 위치부터 이동하는 것이 아닌 저장된 마지막 `index` 값부터 움직이는 걸 확인했습니다.
+- 이에 대한 해결 방법으로 onKeyDown이 발생할 경우 `index` 값을 같이 넘겨주었습니다. 위, 아래 방향 키가 눌릴 경우 `index` 값을 받아서 `focus`에 업데이트해 줍니다. `focus`와 현재 `index` 값이 같다면 `isFocus`가 `true`가 되어 `itemRef`에 focus를 줍니다.
+
+```jsx
+useEffect(() => {
+    if (!isFocus) {
+      return;
+    }
+    itemRef.current.focus();
+  }, [isFocus]);
+```

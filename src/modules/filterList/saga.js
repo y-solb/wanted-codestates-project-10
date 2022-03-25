@@ -1,4 +1,4 @@
-import { call, put, takeLatest, all, delay } from 'redux-saga/effects';
+import { call, put, takeLatest, delay } from 'redux-saga/effects';
 import search from '../../service/searchKeyword';
 import {
   GET_SEARCH,
@@ -8,11 +8,23 @@ import {
   CLOSE_SEARCHLIST,
 } from './action';
 
+const TIME = 60 * 1000;
+
+function checkExpireTime() {
+  Object.keys(localStorage).forEach((key) => {
+    const value = JSON.parse(localStorage.getItem(key));
+    if (Date.now() > value.expireTime) {
+      localStorage.removeItem(key);
+    }
+  });
+}
+
 function* searchRequest(action) {
   yield put({ type: RESET_SEARCH });
   yield delay(500);
 
   if (action.keyword.length > 0) {
+    checkExpireTime();
     const localStorageData = localStorage.getItem(action.keyword);
 
     if (localStorageData) {
@@ -21,17 +33,17 @@ function* searchRequest(action) {
         newList: JSON.parse(localStorageData).filteredList,
       });
     } else {
-      const response = yield call(search, action.keyword);
-      const TIME = 10000;
-      const value = {
-        filteredList: response.data.slice(0, 7),
-        expireTime: Date.now() + TIME,
-      };
-      localStorage.setItem(action.keyword, JSON.stringify(value));
       try {
+        const response = yield call(search, action.keyword);
+        const newList = response.data.slice(0, 7);
+        const value = {
+          filteredList: newList,
+          expireTime: Date.now() + TIME,
+        };
+        localStorage.setItem(action.keyword, JSON.stringify(value));
         yield put({
           type: GET_SEARCH_SUCCESS,
-          newList: response.data.slice(0, 7),
+          newList,
         });
       } catch (error) {
         yield put({ type: GET_SEARCH_FAIL, error: error.response.data });
@@ -43,10 +55,6 @@ function* searchRequest(action) {
   }
 }
 
-function* waitSearchRequest() {
-  yield takeLatest(GET_SEARCH, searchRequest);
-}
-
 export default function* searchSaga() {
-  yield all([waitSearchRequest()]);
+  yield takeLatest(GET_SEARCH, searchRequest);
 }
